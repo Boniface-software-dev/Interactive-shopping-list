@@ -1,8 +1,11 @@
-html, body {
-    height: 100%;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
     margin: 0;
-    padding: 0;
-    background-color: rgb(80, 255, 220);
+    background-image: url(./imagess/shopping-cart.jpg);
+    background-size: 100%;
 }
 
 .purchased {
@@ -10,3 +13,25 @@ html, body {
     background-color: #f0f0f0;
 }
 
+#shopping-list-container {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 2px solid black; 
+    text-align: center;
+    width: 320px; 
+}
+
+li {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: #fff; 
+    display: list-item; 
+    align-items: center;
+}
+
+ul {
+    list-style-type: disc; 
+    padding-left: 20px; 
+    text-align: left; 
+}

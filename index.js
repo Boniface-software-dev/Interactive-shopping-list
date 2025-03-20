@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     markPurchasedButton.addEventListener('click', () => {
-        const selectedItems = Array.from(itemList.querySelectorAll('li.selected'));
+        const selectedItems = Array.from(itemList.querySelectorAll('item-list li.selected'));
         selectedItems.forEach(item => {
             item.classList.toggle('purchased');
             item.classList.remove('selected');
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     itemList.addEventListener('click', (event) => {
-        if (event.target.tagName === 'LI') {
+        if (event.target.tagName === 'li') {
             event.target.classList.toggle('selected');
         }
     });
