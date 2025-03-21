@@ -2,10 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemInput = document.getElementById('item-input');
     const addButton = document.getElementById('add-button');
     const itemList = document.getElementById('item-list');
-    const markPurchasedButton = document.getElementById('mark-purchased-button');
     const clearListButton = document.getElementById('clear-list-button');
 
-    let shoppingList = [];
+    let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
 
     function renderList() {
         itemList.innerHTML = '';
@@ -16,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             checkbox.checked = item.purchased;
             checkbox.addEventListener('change', () => {
                 item.purchased = checkbox.checked;
+                updateLocalStorage();
                 if (checkbox.checked) {
                     listItem.classList.add('purchased');
                 } else {
@@ -23,16 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const itemText = document.createElement('span');
-            itemText.textContent = item.text;
+            const itemTextSpan = document.createElement('span');
+            itemTextSpan.textContent = item.text;
             if (item.purchased) {
                 listItem.classList.add('purchased');
             }
 
+            const editButton = document.createElement('button');
+            editButton.textContent = "Edit";
+            editButton.classList.add("edit-button");
+
+            editButton.addEventListener('click', () => {
+                listItem.classList.add('editing');
+                const itemTextInput = document.createElement('input');
+                itemTextInput.type = 'text';
+                itemTextInput.value = item.text;
+                itemTextInput.addEventListener('blur', () => {
+                    item.text = itemTextInput.value;
+                    listItem.classList.remove('editing');
+                    updateLocalStorage();
+                    renderList();
+                });
+                listItem.appendChild(itemTextInput);
+                itemTextInput.focus();
+            });
+
             listItem.appendChild(checkbox);
-            listItem.appendChild(itemText);
+            listItem.appendChild(itemTextSpan);
+            listItem.appendChild(editButton);
             itemList.appendChild(listItem);
         });
+    }
+
+    function updateLocalStorage() {
+        localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
     }
 
     addButton.addEventListener('click', () => {
@@ -40,35 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (itemText) {
             shoppingList.push({ text: itemText, purchased: false });
             itemInput.value = '';
+            updateLocalStorage();
             renderList();
         }
     });
 
-    markPurchasedButton.addEventListener('click', () => {
-        const selectedItems = Array.from(itemList.querySelectorAll('li.selected'));
-        selectedItems.forEach(item => {
-            const index = parseInt(item.querySelector('input[type="checkbox"]').parentNode.getAttribute('data-index'));
-            shoppingList[index].purchased = !shoppingList[index].purchased;
-            if (shoppingList[index].purchased) {
-              item.classList.add('purchased');
-            } else {
-              item.classList.remove('purchased');
-            }
-            item.classList.remove('selected');
-        });
-        renderList();
-    });
-
     clearListButton.addEventListener('click', () => {
         shoppingList = [];
+        updateLocalStorage();
         renderList();
     });
 
-    itemList.addEventListener('click', (event) => {
-        if (event.target.tagName === 'LI') {
-            event.target.classList.toggle('selected');
-        }
-    });
-
-    renderList(); // Initial render
-});~
+    renderList();
+});

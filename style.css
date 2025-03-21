@@ -35,3 +35,7 @@ ul {
     padding-left: 20px; 
     text-align: left; 
 }
+
+li input[type="text"] {
+    margin-left: 40px; 
+}
